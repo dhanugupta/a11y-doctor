@@ -29,6 +29,7 @@ Audit ──▶ Prioritize ──▶ Fix ──▶ Verify
 
 - **New to this?** Follow [Getting started: step by step](#getting-started-step-by-step-beginners) below. It scans a demo website in about 15 minutes, with no code needed.
 - **How does it work?** [Architecture and flow diagrams](docs/architecture.md): system overview, how agents load the skill, the Audit → Fix → Verify loop, engine internals, the static and runtime pipelines, agent and CI sequences, and the finding lifecycle.
+- **Sharing or publishing it?** [Publishing and sharing](docs/publishing.md) covers Claude Code (plugin marketplace), claude.ai (zip upload), OpenAI Codex/ChatGPT, GitHub Copilot, Cursor and `npx skills`.
 - **Using it in a real codebase?** Read [Using A11y Doctor in your own repo](docs/guide-your-repo.md), a walkthrough on a real open-source monorepo (Next.js + Expo). It covers installing the skill, the first audit, **asking your agent to fix issues** (with example prompts and the resulting diffs), re-scanning, and the team baseline + PR gate.
 
 ## Getting started: step by step (beginners)
@@ -255,6 +256,15 @@ node a11y-doctor/install.mjs /path/to/your-project --with-ci     # + PR gate wor
 node a11y-doctor/install.mjs --global                            # ~/.claude/skills for all projects
 ```
 
+Other ways to install, all covered in [docs/publishing.md](docs/publishing.md):
+
+```bash
+npx skills add dhanugupta/a11y-doctor                              # any agent (Claude Code, Codex, Cursor, Copilot, …)
+claude plugin marketplace add dhanugupta/a11y-doctor && claude plugin install a11y-doctor@a11y-doctor   # Claude Code plugin
+node a11y-doctor/install.mjs /path/to/your-project --target agents # OpenAI Codex (.agents/skills)
+npm run package                                                    # dist/a11y-doctor.zip for claude.ai upload
+```
+
 Or copy the `a11y-doctor/` folder into any of these locations:
 
 | Agent | Project | Personal |
@@ -262,6 +272,7 @@ Or copy the `a11y-doctor/` folder into any of these locations:
 | Claude Code | `.claude/skills/a11y-doctor/` | `~/.claude/skills/a11y-doctor/` |
 | Cursor | `.cursor/skills/`, `.agents/skills/` or `.claude/skills/` | `~/.cursor/skills/` |
 | GitHub Copilot | `.github/skills/`, `.agents/skills/` or `.claude/skills/` | `~/.copilot/skills/` |
+| OpenAI Codex | `.agents/skills/` | `~/.agents/skills/` |
 
 ## Use
 
@@ -313,12 +324,15 @@ a11y-doctor/                 ← the skill (this folder is what gets installed)
 │                            screen-readers, aaa, native-*
 ├── scripts/                 audit.mjs, detect-stack.mjs, static-scan.mjs, axe-scan.mjs, lib/
 └── assets/                  report-template, lint-configs/, test-templates/, agent-rules/, ci/
+docs/publishing.md           how to share/publish on each platform
 docs/architecture.md         architecture + flow diagrams (Mermaid)
 docs/guide-your-repo.md      walkthrough: install, audit, agent fixes, baseline + PR gate
 evals/                       fixture apps with seeded violations + recall/false-positive runner
 test/                        unit tests for the engine
 tools/validate-skill.mjs     Agent Skills spec + portability validator
-install.mjs                  installer
+install.mjs                  installer (--target claude|agents|both)
+.claude-plugin/              Claude Code plugin + marketplace manifests
+tools/package-skill.mjs      builds dist/a11y-doctor.zip (claude.ai upload / release asset)
 ```
 
 ## Development
@@ -331,6 +345,10 @@ npm run evals -- --verbose
 To add a check: implement it in `scripts/lib/heuristics.mjs`, then add an `expect: <rule>` marker above a seeded violation in `evals/fixtures/`, plus a clean counter-example. The eval fails on any missed expectation **or** false positive.
 
 Keep `SKILL.md` under 500 lines and its frontmatter to spec fields only (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`), so it stays portable across agents. `npm run validate` enforces both.
+
+## License
+
+[MIT](LICENSE) © dhanugupta
 
 ## Scope and limits
 

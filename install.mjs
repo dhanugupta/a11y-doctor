@@ -6,7 +6,8 @@
 //   node install.mjs --global [--link]
 //
 // `.claude/skills/` is read by Claude Code, Cursor and GitHub Copilot (VS Code,
-// CLI and cloud agent), so a single install covers all three.
+// CLI and cloud agent), so a single install covers all three. OpenAI Codex reads
+// `.agents/skills/` instead: use `--target agents` (or `both`).
 
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync, appendFileSync, lstatSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -18,6 +19,14 @@ const skillSrc = join(here, 'a11y-doctor');
 
 const args = process.argv.slice(2);
 const flag = (f) => args.includes(f);
+const valueOf = (f) => {
+  const eq = args.find((a) => a.startsWith(`${f}=`));
+  if (eq) return eq.slice(f.length + 1);
+  const i = args.indexOf(f);
+  return i !== -1 ? args[i + 1] : undefined;
+};
+const VALUE_FLAGS = new Set(['--target']);
+const positional = args.filter((a, i) => !a.startsWith('--') && !VALUE_FLAGS.has(args[i - 1]));
 if (flag('--help') || flag('-h')) {
   console.log(`Usage:
   node install.mjs <project-dir> [options]   install into <project-dir>/.claude/skills/a11y-doctor
@@ -26,27 +35,39 @@ if (flag('--help') || flag('-h')) {
 Options:
   --with-rules   also add always-on rules: .cursor/rules/a11y.mdc and .github/instructions/a11y.instructions.md
   --with-ci      also add .github/workflows/a11y-doctor.yml (PR gate on new serious issues)
+  --target <t>   where to install the skill:
+                   claude (default)  .claude/skills  → Claude Code, Cursor, GitHub Copilot
+                   agents            .agents/skills  → OpenAI Codex, Cursor, GitHub Copilot
+                   both              both folders (Cursor/Copilot may then list the skill twice)
   --link         symlink instead of copy (for developing the skill)
   --force        overwrite existing rules/CI files`);
   process.exit(0);
 }
 
 const global = flag('--global');
-const target = global ? homedir() : resolve(args.find((a) => !a.startsWith('--')) ?? process.cwd());
+const target = global ? homedir() : resolve(positional[0] ?? process.cwd());
 if (!existsSync(target)) {
   console.error(`Target directory does not exist: ${target}`);
   process.exit(1);
 }
+const targetKind = valueOf('--target') ?? 'claude';
+if (!['claude', 'agents', 'both'].includes(targetKind)) {
+  console.error(`--target must be claude, agents or both (got "${targetKind}")`);
+  process.exit(1);
+}
+const skillRoots = { claude: ['.claude'], agents: ['.agents'], both: ['.claude', '.agents'] }[targetKind];
+const dests = skillRoots.map((r) => join(target, r, 'skills', 'a11y-doctor'));
 
-const dest = join(target, '.claude', 'skills', 'a11y-doctor');
-mkdirSync(dirname(dest), { recursive: true });
-if (existsSync(dest) || isSymlink(dest)) rmSync(dest, { recursive: true, force: true });
-if (flag('--link')) {
-  symlinkSync(skillSrc, dest, process.platform === 'win32' ? 'junction' : 'dir');
-  console.log(`✔ Linked  ${dest} → ${skillSrc}`);
-} else {
-  cpSync(skillSrc, dest, { recursive: true });
-  console.log(`✔ Copied  skill → ${dest}`);
+for (const dest of dests) {
+  mkdirSync(dirname(dest), { recursive: true });
+  if (existsSync(dest) || isSymlink(dest)) rmSync(dest, { recursive: true, force: true });
+  if (flag('--link')) {
+    symlinkSync(skillSrc, dest, process.platform === 'win32' ? 'junction' : 'dir');
+    console.log(`✔ Linked  ${dest} → ${skillSrc}`);
+  } else {
+    cpSync(skillSrc, dest, { recursive: true });
+    console.log(`✔ Copied  skill → ${dest}`);
+  }
 }
 
 if (!global) {
@@ -88,9 +109,11 @@ if (!global) {
   }
 }
 
-const scripts = global ? '~/.claude/skills/a11y-doctor/scripts' : '.claude/skills/a11y-doctor/scripts';
+const firstRoot = skillRoots[0];
+const scripts = global ? `~/${firstRoot}/skills/a11y-doctor/scripts` : `${firstRoot}/skills/a11y-doctor/scripts`;
+const agentsFor = { claude: 'Claude Code, Cursor and GitHub Copilot', agents: 'OpenAI Codex, Cursor and GitHub Copilot', both: 'Claude Code, OpenAI Codex, Cursor and GitHub Copilot' }[targetKind];
 console.log(`
-Ready for Claude Code, Cursor and GitHub Copilot.
+Ready for ${agentsFor}.
   Ask your agent:  "audit the accessibility of src/components/Checkout"   (or /a11y-doctor)
   Or run from the project root:  node ${scripts}/audit.mjs --changed`);
 

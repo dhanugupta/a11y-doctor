@@ -1,0 +1,12 @@
+{
+  "name": "a11y-doctor",
+  "description": "Accessibility (WCAG 2.2 A/AA) audit and fix skill for AI coding agents",
+  "owner": { "name": "dhanugupta" },
+  "plugins": [
+    {
+      "name": "a11y-doctor",
+      "source": "./",
+      "description": "Audit, fix and verify WCAG 2.2 A/AA accessibility in web and mobile code, with screen reader test scripts and a CI gate."
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 ---
 name: a11y-doctor
 description: Audit and fix accessibility (a11y) against WCAG 2.2 A/AA in React, Next.js, Angular, Vue, React Native, iOS and Android code. Use for accessibility, a11y, WCAG, ADA / Section 508 / EN 301 549, screen readers (VoiceOver, NVDA, JAWS, Narrator, TalkBack, VoiceView) or screen reader test scripts, voice control (Voice Control, Voice Access, Dragon), keyboard navigation, focus management or traps, ARIA, semantic HTML, alt text, form labels or errors, color contrast, target size; auditing, reviewing or fixing a component, page, module or PR; or building accessible modals, menus, tabs, comboboxes, forms or custom controls.
+license: MIT
 compatibility: Node.js 20+ and git. Optional — the project's ESLint a11y plugins and playwright + @axe-core/playwright add depth; without them built-in checks and guided review are used.
 metadata:
   version: "0.2.0"

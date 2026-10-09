@@ -1,3 +1,4 @@
 node_modules/
 .a11y-doctor/
 .DS_Store
+dist/

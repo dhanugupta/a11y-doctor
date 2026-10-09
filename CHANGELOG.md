@@ -18,6 +18,11 @@
   - the description went from ≈200 to ≈160 tokens with all trigger words kept
   - screen reader guidance is split into core (`screen-readers.md`) and extended (`assistive-tech.md`)
   - the validator prints the context cost
+- **Publishing**:
+  - Claude Code plugin marketplace (`.claude-plugin/`, validated with `--strict`)
+  - `install.mjs --target agents|both` for OpenAI Codex (`.agents/skills`)
+  - `npm run package` builds the claude.ai upload zip
+  - new `docs/publishing.md` covering every platform
 - **New `docs/architecture.md`**: 9 Mermaid diagrams covering the system, skill loading, the audit/fix/verify flow, engine internals, the static and runtime pipelines, agent and CI sequences, and the finding lifecycle.
 - **New guide** `docs/guide-your-repo.md`: an end-to-end walkthrough on a real open-source monorepo, with agent prompts.
 

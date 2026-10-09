@@ -1,0 +1,26 @@
+{
+  "name": "a11y-doctor",
+  "displayName": "A11y Doctor",
+  "version": "0.2.0",
+  "description": "Audit, fix and verify WCAG 2.2 A/AA accessibility in React, Next.js, Angular, Vue, React Native, iOS and Android code, with screen reader test scripts and a CI gate.",
+  "author": {
+    "name": "dhanugupta"
+  },
+  "homepage": "https://github.com/dhanugupta/a11y-doctor",
+  "repository": "https://github.com/dhanugupta/a11y-doctor",
+  "license": "MIT",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "aria",
+    "screen-reader",
+    "react",
+    "angular",
+    "vue",
+    "react-native"
+  ],
+  "skills": [
+    "./a11y-doctor"
+  ]
+}
