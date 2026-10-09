@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- expect: android-content-description -->
+    <ImageButton
+        android:id="@+id/share"
+        android:src="@drawable/ic_share" />
+    <ImageButton
+        android:id="@+id/close"
+        android:contentDescription="@string/close"
+        android:src="@drawable/ic_close" />
+    <ImageView
+        android:importantForAccessibility="no"
+        android:src="@drawable/divider" />
+    <!-- expect: android-content-description -->
+    <ImageView android:src="@drawable/product" />
+</LinearLayout>

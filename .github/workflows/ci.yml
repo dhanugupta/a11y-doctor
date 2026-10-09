@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Validate skill (Agent Skills spec, portable fields only)
+        run: npm run validate
+      - name: Unit tests
+        run: npm test
+      - name: Detection evals (recall + false positives on fixture apps)
+        run: npm run evals

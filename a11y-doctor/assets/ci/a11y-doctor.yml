@@ -1,0 +1,44 @@
+# .github/workflows/a11y-doctor.yml
+# Fails a pull request when it introduces new serious/critical accessibility issues.
+# Known legacy issues in .a11y-doctor/baseline.json are ignored (create it with --update-baseline).
+name: a11y-doctor
+
+on:
+  pull_request:
+    paths: ['**/*.tsx', '**/*.jsx', '**/*.ts', '**/*.js', '**/*.vue', '**/*.html', '**/*.css', '**/*.scss', '**/res/layout*/**']
+
+jobs:
+  a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # needed to diff against the base branch
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # Optional but recommended: installs the project's ESLint a11y plugins so the audit uses them.
+      - run: npm ci
+
+      - name: Audit changed files (WCAG 2.2 A/AA)
+        run: >
+          node .claude/skills/a11y-doctor/scripts/audit.mjs
+          --changed --base origin/${{ github.base_ref }}
+          --fail-on serious
+
+      # Optional runtime scan: start your app first, then add e.g. --url http://localhost:3000
+      # (requires playwright + @axe-core/playwright and `npx playwright install --with-deps chromium`)
+
+      - name: Publish report to job summary
+        if: always()
+        run: test -f .a11y-doctor/report.md && cat .a11y-doctor/report.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: a11y-doctor-report
+          path: .a11y-doctor/report.*
+          if-no-files-found: ignore

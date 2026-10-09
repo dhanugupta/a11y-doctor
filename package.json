@@ -1,0 +1,16 @@
+{
+  "name": "a11y-doctor",
+  "version": "0.1.0",
+  "description": "Agent Skill for auditing and fixing WCAG 2.2 A/AA accessibility issues in React, Angular, Vue and native apps — works with Claude Code, Cursor and GitHub Copilot.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "evals": "node evals/run-evals.mjs",
+    "validate": "node tools/validate-skill.mjs a11y-doctor",
+    "check": "npm run validate && npm test && npm run evals"
+  }
+}

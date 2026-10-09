@@ -1,0 +1,27 @@
+<mat-toolbar>
+  <!-- expect: click-without-keyboard -->
+  <div class="logo" (click)="goHome()">Acme</div>
+  <!-- expect: control-name -->
+  <button mat-icon-button (click)="toggleMenu()"><mat-icon>menu</mat-icon></button>
+  <button mat-icon-button aria-label="Search" (click)="search()"><mat-icon>search</mat-icon></button>
+  <button mat-icon-button [attr.aria-label]="closeLabel"><mat-icon>close</mat-icon></button>
+  <!-- expect: form-label -->
+  <input [(ngModel)]="query" placeholder="Search products">
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+  </mat-form-field>
+  <!-- expect: img-alt -->
+  <img [src]="avatarUrl">
+  <img [src]="avatarUrl" [alt]="userName">
+  <a routerLink="/profile">{{ userName }}</a>
+  <!-- expect: interactive-role-not-focusable -->
+  <span role="button" (keydown.enter)="open()">Open</span>
+  @if (items.length > 0) {
+    <ul>
+      @for (item of items; track item.id) {
+        <li><a [routerLink]="['/items', item.id]">{{ item.name }}</a></li>
+      }
+    </ul>
+  }
+</mat-toolbar>

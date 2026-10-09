@@ -1,0 +1,5 @@
+/* expect: focus-outline-removed */
+*:focus { outline: none; }
+.btn:focus:not(:focus-visible) { outline: none; }
+.btn:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; }
+.input:focus { outline: 0; box-shadow: 0 0 0 3px #1a73e8; }

@@ -1,0 +1,20 @@
+---
+description: Accessibility (WCAG 2.2 AA) defaults for UI code — semantics, keyboard, focus, forms, ARIA, contrast
+globs: **/*.{tsx,jsx,vue,html,svelte,css,scss},**/*.component.ts
+alwaysApply: false
+---
+
+Write accessible UI by default (WCAG 2.2 Level A + AA). For audits and fixes, use the **a11y-doctor** skill.
+
+- Use native elements: `<button>` for actions, `<a href>` for navigation, `<label>` for fields, `<dialog>` for modals. Never put click handlers on `div`/`span`/`li`.
+- Every interactive element has an accessible name: visible text, or `aria-label` on icon-only buttons (icons get `aria-hidden="true"`).
+- Images: meaningful `alt`, or `alt=""` if decorative. Never `alt="image"`.
+- Form fields: a visible, associated label (a placeholder is not a label); errors shown as text, linked with `aria-describedby` and `aria-invalid`; `autocomplete` on personal data fields; never block paste or set `autocomplete="off"` on credentials.
+- Keyboard: everything works with Tab, Enter, Space, Esc and arrow keys (in composite widgets). No `tabindex` greater than 0. Modals trap focus, close on Esc and return focus to their trigger.
+- Focus: never remove outlines without a `:focus-visible` replacement (≥3:1 contrast); focused elements must not be hidden under sticky headers or footers (`scroll-padding`).
+- ARIA only when no native element fits, and then the full pattern (role + state + keyboard). Keep `aria-expanded`, `aria-selected`, `aria-checked` and `aria-pressed` in sync with the UI.
+- Dynamic updates (toasts, "saved", result counts) go through a live region (`role="status"`) that is already in the DOM.
+- Text contrast ≥ 4.5:1 (≥ 3:1 for large text and UI boundaries); never convey meaning by color alone.
+- Pointer targets ≥ 24×24 CSS px; drag interactions need a click/tap alternative.
+- SPA route changes: update `document.title` and move focus to the new page heading.
+- Use the project's accessible primitives (React Aria / Radix / Angular CDK & Material / Headless UI) before hand-rolling widgets.
