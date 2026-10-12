@@ -9,6 +9,7 @@
   },
   "homepage": "https://github.com/dhanugupta/a11y-doctor",
   "repository": "https://github.com/dhanugupta/a11y-doctor",
+  "supportUrl": "https://github.com/dhanugupta/a11y-doctor/issues",
   "license": "MIT",
   "keywords": [
     "accessibility",

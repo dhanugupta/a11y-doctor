@@ -346,6 +346,10 @@ To add a check: implement it in `scripts/lib/heuristics.mjs`, then add an `expec
 
 Keep `SKILL.md` under 500 lines and its frontmatter to spec fields only (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`), so it stays portable across agents. `npm run validate` enforces both.
 
+## Support
+
+Questions, bugs and false positives: [open an issue](https://github.com/dhanugupta/a11y-doctor/issues).
+
 ## Privacy and security
 
 - **No credentials.** The scripts never read tokens, API keys, SSH keys, `.npmrc`, cookies or environment secrets.
