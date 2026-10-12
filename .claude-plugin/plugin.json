@@ -4,7 +4,8 @@
   "version": "0.2.0",
   "description": "Audit, fix and verify WCAG 2.2 A/AA accessibility in React, Next.js, Angular, Vue, React Native, iOS and Android code, with screen reader test scripts and a CI gate.",
   "author": {
-    "name": "dhanugupta"
+    "name": "dhanugupta",
+    "url": "https://github.com/dhanugupta"
   },
   "homepage": "https://github.com/dhanugupta/a11y-doctor",
   "repository": "https://github.com/dhanugupta/a11y-doctor",

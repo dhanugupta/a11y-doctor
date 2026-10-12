@@ -346,6 +346,14 @@ To add a check: implement it in `scripts/lib/heuristics.mjs`, then add an `expec
 
 Keep `SKILL.md` under 500 lines and its frontmatter to spec fields only (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`), so it stays portable across agents. `npm run validate` enforces both.
 
+## Privacy and security
+
+- **No credentials.** The scripts never read tokens, API keys, SSH keys, `.npmrc`, cookies or environment secrets.
+- **No telemetry.** Nothing is sent anywhere except to the pages you scan.
+- **Network use is opt-in.** Only `--url` and `--storybook` touch the network. They open the pages you name in a local headless browser, and Storybook's `index.json` is fetched to list its stories. Static audits run fully offline.
+- **Local reads and writes.** The scripts read your source files and `package.json`, and run read-only `git` commands (`diff`, `ls-files`, `merge-base`, `rev-parse`) for `--changed`. They write results only to `.a11y-doctor/`.
+- **Nothing installed or started on its own.** The skill tells the agent never to install packages, start servers or launch screen readers without asking.
+
 ## License
 
 [MIT](LICENSE) © dhanugupta

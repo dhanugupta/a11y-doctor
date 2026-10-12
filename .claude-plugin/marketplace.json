@@ -1,7 +1,7 @@
 {
   "name": "a11y-doctor",
   "description": "Accessibility (WCAG 2.2 A/AA) audit and fix skill for AI coding agents",
-  "owner": { "name": "dhanugupta" },
+  "owner": { "name": "dhanugupta", "url": "https://github.com/dhanugupta" },
   "plugins": [
     {
       "name": "a11y-doctor",
